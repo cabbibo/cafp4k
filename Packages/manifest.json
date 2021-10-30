@@ -1,0 +1,30 @@
+{
+  "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [
+        "org.nuget"
+      ]
+    },
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [
+        "jp.keijiro"
+      ]
+    }
+  ],
+  "dependencies": {
+    "jp.keijiro.minis": "1.0.10",
+    "com.unity.postprocessing": "3.1.1",
+    "com.unity.recorder": "2.5.5",
+    "com.unity.ugui": "1.0.0",
+    "org.nuget.system.memory": "4.5.3",
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.screencapture": "1.0.0",
+    "com.unity.modules.uielements": "1.0.0"
+  }
+}
