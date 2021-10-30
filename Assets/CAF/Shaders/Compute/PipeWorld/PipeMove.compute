@@ -1,0 +1,162 @@
+﻿#pragma kernel Flow
+
+struct Vert{
+  float3 pos;
+  float3 vel;
+  float3 nor;
+  float3 tangent;
+  float3 axis;
+  float life;
+};
+
+float4x4 _Transform;
+
+RWStructuredBuffer<Vert> _VertBuffer;
+
+int _VertBuffer_COUNT;
+int _TransformBuffer_COUNT;
+
+#include "../../Chunks/safeID.cginc"
+#include "../../Chunks/snoise.cginc"
+#include "../../Chunks/hash.cginc"
+#include "../../Chunks/curlNoise.cginc"
+#include "../../Chunks/ParticleAxisHelpers.cginc"
+
+
+
+
+void DoInit( inout Vert vert , float pID ){
+    vert.life = hash(float(pID));
+    vert.axis = newAxis(float(pID));
+}
+
+float3 DoRemitPosition(int p){
+   return mul( _Transform, float4( 0,hash(float(p)*41)-.5 , hash(float(p)*231)-.5,1)).xyz;
+}
+
+float3 DoRemitVelocity(int p){return 0;}
+
+
+float3 DoForce( inout Vert vert , int pID){
+    float3 force = 0;
+    force += 1.4*curlNoise(vert.pos * .4);
+    force +=  mul( _Transform, float4( 0,1 ,0,0)).xyz;
+    force *= .00004 * (1+hash(pID*1021.))/2;
+
+
+    vert.nor = mul(rotation(vert.axis,vert.life*10*(hash(float(pID*123))+1)),float4(0,0,1,0)).xyz;
+    // Giving the vert a tangent
+    vert.tangent =normalize(cross( vert.axis , normalize( vert.nor )));
+
+    force = 0;
+
+
+    vert.pos = float3(sin(vert.life * 4 * 6.28) , -cos(vert.life * 1 * 6.28) , sin(vert.life *2 * 6.28)) * 4;
+
+   // vert.pos *=1;
+   // vert.pos = floor( vert.pos );
+    //vert.pos /= 1;
+
+    //vert.pos.x = (1- vert.life) * (hash(float(pID) *313) +1) * 5;
+    
+    return force;
+}
+
+float DoLife( Vert v , int pID ){
+    return 0.0005;//.0004 * (3+sin(float(pID)));
+}
+
+float DoDampening( Vert v , int pID){
+    return .98;
+}
+
+#define NR_THREADS 128
+[numthreads(NR_THREADS,1,1)]
+void Flow(uint3 id : SV_DispatchThreadID) {
+
+
+    int pID = id.x;
+  pID = safeID(pID,_VertBuffer_COUNT);
+  Vert vert = _VertBuffer[pID];
+
+
+  
+  if( vert.life == 0 ){ vert.life = hash(float(pID)); }
+
+
+  //if( length(vert.axis) == 0 ){ vert.axis = newAxis(float(pID)); }
+  
+
+  /*if( vert.life < 0 ){
+      vert.life = 1;
+  }*/
+
+    vert.life -= .0005;
+
+    float3 addAmount = (sin( vert.life * 11.4  * (2 + 3 * hash(pID *313)) )+2) * float3( sin( vert.life * 3 * (2+hash(pID *32)) + hash(pID * 3) *2001) , sin( vert.life * 2 * (2+hash(pID *452))+ hash(pID *415) *2001 ), sin( vert.life * 2 * (2+hash(pID *31)) + hash(pID *315) *2001));
+
+
+addAmount /= 3;
+
+    float3 center=  mul( _Transform, float4( 0,0,0,1)).xyz;
+
+    addAmount -= (vert.pos - center) * .01;
+
+
+    float3 d = (vert.pos - center);
+
+
+    float maxDist = 10;
+    if( d.x > maxDist ){
+        addAmount.x = -10;
+    }
+
+    if( d.x < -maxDist ){
+        addAmount.x = +10;
+    }
+
+
+    if( d.y > maxDist ){
+        addAmount.y = -10;
+    }
+
+    if( d.y < -maxDist ){
+        addAmount.y = +10;
+    }
+    
+
+    if( d.z > maxDist ){
+        addAmount.z = -10;
+    }
+
+    if( d.z < -maxDist ){
+        addAmount.z = +10;
+    }
+    
+    
+
+   /* addAmount *= 3;
+    addAmount = floor(addAmount);
+    addAmount /=3;*/
+
+    float3 dir = float3(1,0,0);
+    if( abs(addAmount.x) > abs(addAmount.y) && abs(addAmount.x) > abs(addAmount.z)  ){
+        //dir = float3(1,0,0);
+        addAmount = float3(addAmount.x,0,0);
+    }else if( abs(addAmount.y) > abs(addAmount.x) && abs(addAmount.y) > abs(addAmount.z)  ){
+        //dir = float3(1,0,0);
+        addAmount = float3(0,addAmount.y,0);
+    }else if( abs(addAmount.z) > abs(addAmount.x) && abs(addAmount.z) > abs(addAmount.y)  ){
+        //dir = float3(1,0,0);
+        addAmount = float3(0,0,addAmount.z);
+    }else{
+        addAmount = 0;
+    }
+    
+    //addAmount = normalize(addAmount);
+    vert.pos += addAmount  * .01;
+    //vert.pos += float3(sin(vert.life * 4 * 6.28) , -cos(vert.life * 1 * 6.28) , sin(vert.life *2 * 6.28)) * 4 * .01;
+
+  
+  _VertBuffer[pID] = vert;
+}

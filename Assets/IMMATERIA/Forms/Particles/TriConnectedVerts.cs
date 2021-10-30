@@ -19,10 +19,15 @@ public class TriConnectedVerts : MeshVerts {
   // note that we are comparing via 'position'
   // so verts that are placed on top of each other
   // will be considered the same vert!
+  
+  [HideInInspector]
   public List<int> connections;
 
 
+  [HideInInspector]
   public int[] numConnections;
+  
+  [HideInInspector]
   public int[] connectionStart;
 
 
@@ -52,6 +57,8 @@ public class TriConnectedVerts : MeshVerts {
 
    int totalIndicies = 0;
   
+
+  print(triVals.Length/3);
    for( int i = 0; i < count; i++ ){
      me = pos[i];
      connectionStart[i] = totalIndicies;

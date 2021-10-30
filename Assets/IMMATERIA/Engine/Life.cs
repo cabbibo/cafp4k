@@ -159,6 +159,7 @@ public class Life : Cycle {
     if( primaryForm == null ){ DebugThis( "I have no primary form"); }
 
     float totalCount = (float)primaryForm.count * countMultiplier;
+    //print( totalCount );
     if( totalCount != Mathf.Floor( totalCount )){ DebugThis("your count multiplier is not allowing proper total count");}
     numGroups = ((int)totalCount+((int)numThreads-1))/(int)numThreads;
   }

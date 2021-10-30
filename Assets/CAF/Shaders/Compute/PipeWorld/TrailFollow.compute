@@ -1,0 +1,68 @@
+﻿#pragma kernel Flow
+
+struct Vert{
+  float3 pos;
+  float3 vel;
+  float3 nor;
+  float3 tan;
+  float2 uv;
+  float debug;
+  float life;
+};
+
+float4x4 _Transform;
+
+RWStructuredBuffer<Vert> _VertBuffer;
+RWStructuredBuffer<Vert> _HeadBuffer;
+
+int _ParticlesPerTrail;
+
+int _VertBuffer_COUNT;
+int _HeadBuffer_COUNT;
+#include "../../Chunks/safeID.cginc"
+#include "../../Chunks/snoise.cginc"
+#include "../../Chunks/hash.cginc"
+#include "../../Chunks/curlNoise.cginc"
+#include "../../Chunks/ParticleAxisHelpers.cginc"
+
+
+#define NR_THREADS 128
+[numthreads(NR_THREADS,1,1)]
+void Flow(uint3 id : SV_DispatchThreadID) {
+
+  int pID = id.x;
+
+  int id2 = safeID(pID* _ParticlesPerTrail,_VertBuffer_COUNT);
+  //pID = safeID(pID* _ParticlesPerTrail,_VertBuffer_COUNT);
+  Vert vert = _VertBuffer[id2];
+
+
+    Vert head = _HeadBuffer[pID];
+    vert.pos  = head.pos;
+    vert.debug = pID;
+    _VertBuffer[ id2 ] = vert;
+
+    for( int i = _ParticlesPerTrail-1; i > 0; i-- ){
+
+        int p1 =  (pID * _ParticlesPerTrail + i)%_VertBuffer_COUNT;
+        int p2 =  (pID * _ParticlesPerTrail + i-1)%_VertBuffer_COUNT;
+
+        Vert vert = _VertBuffer[ p1 ];
+        Vert vDown = _VertBuffer[p2 ];
+
+        _VertBuffer[ p1 ].pos = vDown.pos;//head.pos - float3(float(i),0,0);
+        _VertBuffer[p1].life = head.life;
+
+        _VertBuffer[p1].nor = vert.pos - vDown.pos;
+
+    }
+
+
+
+
+
+  
+  //_VertBuffer[pID] = vert;
+
+
+}
