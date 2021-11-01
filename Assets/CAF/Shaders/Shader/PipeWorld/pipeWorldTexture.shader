@@ -97,7 +97,8 @@
                col /= .3*length(v.eye);
           
 
-                if( tCol.a < .5 ){ col = 0;}
+                if( tCol.a < .5){ col = 0;}
+                if( tCol.a < .01){ discard;}
                 return float4(col,1);
             }
 
