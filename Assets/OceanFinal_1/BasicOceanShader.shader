@@ -365,6 +365,8 @@ float depthDelta =  d;
                // col.xyz += float3(.2,.5,1);
 
 
+                col.xyz = c;//
+
                float4 rdCol = tex2D(_RDMain,v.uv);
 
                 col.xyz = lerp( c *c, col , saturate(length(col.xyz) * .4));//-underground.y * .1;//tex2D(_DepthMap , depthLookUp);
@@ -372,10 +374,14 @@ float depthDelta =  d;
                     col = 1;
                 }
 
-                col += rdCol.x;
+               // col += rdCol.x;
+
+                
+               // col.xyz = c;//
+                //col.xyz = d2 * 1;//
 
 
-      float4 distortedPosition = mul( UNITY_MATRIX_VP , float4(v.world + refr * 10,1));       
+      float4 distortedPosition = mul( UNITY_MATRIX_VP , float4(v.world + refr * 0,1));       
       
       float4 reflectedPosition = mul( UNITY_MATRIX_VP , float4(v.world + refl * 30,1));       
 
@@ -383,7 +389,7 @@ float depthDelta =  d;
        float4 screenPos = ComputeScreenPos( distortedPosition);
        float4 screenPos2 = ComputeScreenPos( reflectedPosition);
 
-    float4 depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, screenPos);
+    float4 depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, v.vertex);
     float depth = LinearEyeDepth(depthSample).r;
 
 
@@ -411,26 +417,32 @@ float depthDelta =  d;
 
 //col = lerp( bgTexture , float4(0,1,0,1), .003*depth);
 
-col = reflTexture;
+//col = reflTexture;
 col += lerp( bgTexture , float4(.04,.1,.2,1), saturate(.008*depth));
 
 if( abs(depthDelta) < 10){
-    col = 1;
+    //col = 1;
 }
 
-                col += rdCol.x;
 
-col = saturate(col);
+//col = depth * depth * .01;//
+
+if( depth > 10000 ){
+   // col.xyz = float3(1,0,0);
+}
+              //  col += rdCol.x;
+
+//col = saturate(col);
 
 
-col *= tex2D(_MainTex,float2(length(col) * .3 + .4,0));
+//col *= tex2D(_MainTex,float2(length(col) * .3 + .4,0));
 
 
 
          half4 skyData =UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, refl);
          half3 skyColor = DecodeHDR (skyData, unity_SpecCube0_HDR);
 
-         col.xyz = skyColor * .8;
+         //col.xyz = skyColor * .8;
 
 
 

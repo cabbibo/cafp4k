@@ -86,8 +86,8 @@ Material:
     - _OffsetMultiplier: 0
     - _Opaqueness: 0.1
     - _Parallax: 0.02
-    - _ReflectionMultiplier: 1
-    - _ReflectionSharpness: 2.29
+    - _ReflectionMultiplier: 0.3
+    - _ReflectionSharpness: 1
     - _RefractionBackgroundSampleExtraStep: 0.16
     - _Size: 0.1
     - _SmoothnessTextureChannel: 0

@@ -71,29 +71,29 @@ Material:
     - _IndexOfRefraction: 0.9
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseImportance: 10000
-    - _NoiseSharpness: 11.4
-    - _NoiseSize: 10.52
-    - _NoiseSubtractor: -0.06
+    - _NoiseImportance: 3.6
+    - _NoiseSharpness: 0.8
+    - _NoiseSize: 20
+    - _NoiseSubtractor: 0
     - _NumSteps: 10
     - _OcclusionStrength: 1
-    - _Opaqueness: 0.6
+    - _Opaqueness: 0
     - _Parallax: 0.02
-    - _ReflectionMultiplier: 4.18
-    - _ReflectionSharpness: 5.54
+    - _ReflectionMultiplier: 0
+    - _ReflectionSharpness: 1
     - _RefractionBackgroundSampleExtraStep: 0.2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _StepRefractionMultiplier: 0.3
+    - _StepRefractionMultiplier: 0
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.13474543, g: 0, b: 0.32156864, a: 1}
-    - _CenterOrbColor: {r: 0.51742816, g: 0.745283, b: 0, a: 1}
+    - _CenterOrbColor: {r: 0, g: 1, b: 0.87221956, a: 1}
     - _CenterOrbOffset: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoiseColor: {r: 0.7169523, g: 0, b: 1, a: 1}
-    - _NoiseOffset: {r: 0, g: 3.67, b: 0, a: 1}
+    - _NoiseColor: {r: 0.538177, g: 0, b: 1, a: 1}
+    - _NoiseOffset: {r: 0, g: -1.9, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}

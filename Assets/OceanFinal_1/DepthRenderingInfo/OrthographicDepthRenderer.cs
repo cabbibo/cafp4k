@@ -42,7 +42,7 @@ public class OrthographicDepthRenderer : MonoBehaviour
   public void Set(){
    
     textureDescriptor = new RenderTextureDescriptor( renderSize,renderSize,RenderTextureFormat.Depth,24);
-    texture = RenderTexture.GetTemporary( textureDescriptor );
+    texture = new RenderTexture( textureDescriptor );
 
  
     cam.targetTexture = texture;
@@ -57,13 +57,16 @@ public class OrthographicDepthRenderer : MonoBehaviour
     cam.Render();
 
 
-    if( debugRenderer ){
+    /*if( debugRenderer ){
         debugRenderer.sharedMaterial.SetTexture("_MainTex", texture );
         debugRenderer.transform.localScale = Vector3.one * cam.orthographicSize * 2;
-    }
+    }*/
+
+    this.enabled = false;
 
  
-    if( saveOut ){ SaveTexture( texture ); }
+  //  if( saveOut ){ SaveTexture( texture ); }
+
   }
 
 

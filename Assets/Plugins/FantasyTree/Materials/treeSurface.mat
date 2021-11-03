@@ -58,7 +58,7 @@ Material:
     m_Floats:
     - _AlphaCutoff: 0
     - _AmountShown: 1
-    - _BaseColorMultiplier: 1.88
+    - _BaseColorMultiplier: 0
     - _BumpScale: 1
     - _ColorMultiplier: 10
     - _Cutoff: 0.5
@@ -67,7 +67,7 @@ Material:
     - _FadeFromTop: 1
     - _FallingAmount: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.611
+    - _Glossiness: 0
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
@@ -76,7 +76,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TipColorMultiplier: 6
+    - _TipColorMultiplier: 0.86
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

@@ -73,7 +73,7 @@ Material:
     - _Mode: 0
     - _NoiseImportance: 100000
     - _NoiseSharpness: 10.35
-    - _NoiseSize: 7.7
+    - _NoiseSize: 10
     - _NoiseSubtractor: 0
     - _NumSteps: 10
     - _OcclusionStrength: 1
